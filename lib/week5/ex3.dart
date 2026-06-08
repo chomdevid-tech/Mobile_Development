@@ -1,36 +1,38 @@
+
 import 'package:flutter/material.dart';
 
-void main() => runApp(
-  const MaterialApp(debugShowCheckedModeBanner: false, home: ImageGallery()),
-);
+List<String> images = [
+  "assets/bird.jpg",
+  "assets/bird2.jpg",
+  "assets/insect.jpg",
+  "assets/girl.jpg",
+  "assets/man.jpg",
+];
 
-class ImageGallery extends StatefulWidget {
-  const ImageGallery({super.key});
+class Photo extends StatefulWidget {
+  const Photo({super.key});
 
   @override
-  State<ImageGallery> createState() => _ImageGalleryState();
+  State<Photo> createState() => _PhotoState();
 }
 
-class _ImageGalleryState extends State<ImageGallery> {
-  int _image = 0;
-
-  final List<String> images = [
-    "assets/w4-s2/bird.jpg",
-    "assets/w4-s2/bird2.jpg",
-    "assets/w4-s2/insect.jpg",
-    "assets/w4-s2/girl.jpg",
-    "assets/w4-s2/man.jpg",
-  ];
-
-  void nextImage() {
+class _PhotoState extends State<Photo> {
+  int count = 0;
+  void goNext() {
     setState(() {
-      _image = (_image + 1) % images.length;
+      if (count != 4) {
+        count++;
+      } else {
+        count = 0;
+      }
     });
   }
 
-  void previousImage() {
+  void goPrevious() {
     setState(() {
-      _image = (_image - 1 + images.length) % images.length;
+      if (count != 0) {
+        count--;
+      }
     });
   }
 
@@ -41,23 +43,30 @@ class _ImageGalleryState extends State<ImageGallery> {
       appBar: AppBar(
         backgroundColor: Colors.green[400],
         title: const Text('Image viewer'),
-        actions: [
+        actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.navigate_before),
             tooltip: 'Go to the previous image',
-            onPressed: previousImage,
+            onPressed: goPrevious,
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 50),
+            padding: const EdgeInsets.fromLTRB(0, 0, 50, 0),
             child: IconButton(
               icon: const Icon(Icons.navigate_next),
               tooltip: 'Go to the next image',
-              onPressed: nextImage,
+              onPressed: goNext,
             ),
           ),
         ],
       ),
-      body: Center(child: Image.asset(images[_image])),
+      body: Image.asset(images[count]),
     );
   }
 }
+
+void main() => runApp(
+  MaterialApp(
+    debugShowCheckedModeBanner: false, // Why this line ? Can you explain it ?
+    home: Photo(),
+  ),
+);
