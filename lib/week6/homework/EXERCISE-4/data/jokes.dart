@@ -1,6 +1,15 @@
 import '../model/joke_model.dart';
 
-final List<Joke> jokes = List.generate(
-  20,
-  (index) => Joke(title: "Title ${index + 1}", description: "description${index + 1}"),
-);
+List<Joke> createJokes() {
+  final List<Joke> jokes = [];
+
+  for (int i = 0; i < 20; i++) {
+    jokes.add(
+      Joke(title: "Title ${i + 1}", description: "description ${i + 1}"),
+    );
+  }
+
+  return jokes;
+}
+
+final List<Joke> jokes = createJokes();
