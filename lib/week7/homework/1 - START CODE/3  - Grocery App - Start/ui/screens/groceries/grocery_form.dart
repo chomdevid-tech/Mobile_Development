@@ -1,21 +1,9 @@
-// ---------------------------------------------
-// Create a new statefull widget : GroceryForm
-// ---------------------------------------------
-
-// The form shall be composed of 2 text fields:
-// -	Name of the grocery item
-//-	Quantity (number only)
-
-// ⚠️  For now we don’t select the grocery type, we assume it’s always food
-
-// The form shall be composed of 2 buttons:
-//-	Cancel button
-// -	Add item button
-
 import 'package:flutter/material.dart';
 
 import '../../../data/mock_grocery_data.dart';
 import '../../../models/grocery.dart';
+
+int groceryId = 1;
 
 class GroceryForm extends StatefulWidget {
   const GroceryForm({super.key});
@@ -31,15 +19,19 @@ class _GroceryFormState extends State<GroceryForm> {
   void addItem() {
     final name = nameController.text;
     final quatity = int.tryParse(quantityController.text);
+
     if (name.isEmpty || quatity == null) {
       return;
     }
+
     final newItem = GroceryItem(
-      id: DateTime.now().toString(),
+      id: groceryId.toString(),
       name: name,
       quantity: quatity,
       category: allGroceryItems[0].category,
     );
+
+    groceryId++;
 
     Navigator.pop(context, newItem);
   }
