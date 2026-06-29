@@ -17,23 +17,20 @@ enum AsyncState { notstarted, loading, error, success }
 
 class _ExpensesScreenState extends State<ExpensesScreen> {
   AsyncState state = AsyncState.notstarted;
-  Expense? expense; // not null if fech succeed
   String? error; // not error if error
+  List<Expense>? expenses;
 
   void fetchExpense() async {
     try {
-   
-      state = AsyncState.loading;     // loading state
+      state = AsyncState.loading;
       setState(() {});
 
-      expense = await expenseRepository.fetchExpense();    // Start to fetch
+      expenses = await expenseRepository.fetchExpense();
       state = AsyncState.success; // Success state
       setState(() {});
-
-
     } on ExpenseException catch (e) {
       error = e.message;
-      state = AsyncState.error; // Error state
+      state = AsyncState.error;
       setState(() {});
     }
   }
@@ -50,7 +47,12 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         return Text(error!, style: TextStyle(color: Colors.red));
 
       case AsyncState.success:
-        return ExpenseTile(expense: expense!);
+        return ListView.builder(
+          itemCount: expenses!.length,
+          itemBuilder: (context, i) {
+            return ExpenseTile(expense: expenses![i]);
+          },
+        );
     }
   }
 
