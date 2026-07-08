@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../data/repository/repository_exception.dart';
@@ -33,9 +35,14 @@ class _TodosScreenState extends State<TodosScreen> {
     // Fetch the list of todos from the repo
     // Handle the success, loading and error cases (catch exception)
     // Update the widget state (asyncData)
-
-    // List<Todo> todos = await repository.getTodos();
-    // setState(() => asyncData = AsyncData.success(todos),);
+    try {
+      List<Todo> todos = await repository.getTodos();
+      setState(() => asyncData = AsyncData.success(todos));
+    } catch (e) {
+      setState(() {
+        asyncData = AsyncData.error("Unexpected error");
+      });
+    }
   }
 
   void onUpdateCompleted(Todo todo) async {
@@ -47,6 +54,28 @@ class _TodosScreenState extends State<TodosScreen> {
     // Update the widget state (asyncData)
 
     // ! we dont reload the full list, we update directly the modified Todo in the cache (asyncData)
+
+    bool newCompleted = !todo.completed;
+    await repository.updateCompleted(todo.id, newCompleted);
+
+    List<Todo> currentTodos = asyncData.value!;
+    //create new list loop todo  and then
+    List<Todo> updatedTodos = currentTodos.map((t) {
+      if (t.id == todo.id) {
+        return t.copyWith(newCompleted);
+      } else {
+        return t;
+      }
+    }).toList();
+    try {
+      setState(() {
+        asyncData = AsyncData.success(updatedTodos);
+      });
+    } catch (e) {
+      setState(() {
+        asyncData = AsyncData.error("Error");
+      });
+    }
   }
 
   Widget get content => switch (asyncData.status) {
@@ -83,7 +112,7 @@ class _TodosScreenState extends State<TodosScreen> {
           style: AppTheme.paragraph.copyWith(color: AppTheme.redColor),
         ),
       ],
-    );
+    ); 
   }
 
   @override
