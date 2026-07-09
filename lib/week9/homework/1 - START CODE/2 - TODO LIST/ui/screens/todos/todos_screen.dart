@@ -24,7 +24,6 @@ class _TodosScreenState extends State<TodosScreen> {
   void initState() {
     super.initState();
 
-    // Fetch todos on init state
     _fetchTodos();
   }
 
@@ -50,16 +49,16 @@ class _TodosScreenState extends State<TodosScreen> {
 
     //  TODO
     // Update the todo from the repo
-    // Handle the success, loading and error cases (catch exception)
-    // Update the widget state (asyncData)
+    // Handle the success, loading and error cases 
 
-    // ! we dont reload the full list, we update directly the modified Todo in the cache (asyncData)
+
+
 
     bool newCompleted = !todo.completed;
     await repository.updateCompleted(todo.id, newCompleted);
 
     List<Todo> currentTodos = asyncData.value!;
-    //create new list loop todo  and then
+  
     List<Todo> updatedTodos = currentTodos.map((t) {
       if (t.id == todo.id) {
         return t.copyWith(newCompleted);
