@@ -9,9 +9,6 @@ class TodoCard extends StatelessWidget {
   final Todo todo;
   final ValueChanged<Todo> onTap;
 
-  //  TODO
-  //  Update the widget to disaply both state (completed / not completed) as required
-  //
   TextDecoration? get textDecoration {
     if (todo.completed) {
       return TextDecoration.lineThrough;
@@ -59,10 +56,7 @@ class CheckBox extends StatelessWidget {
 
   final bool checked;
 
-  //  TODO
-  //  Update the widget to disaply both state (completed / not completed) as required
 
-  //
   BoxBorder? get border {
     if (checked) {
       return Border.all(width: 2, color: AppTheme.yellowColor);
